@@ -1,4 +1,4 @@
-# Manufacturing Cost & GHG Manager v0.1
+# Cost & GHG Manager v0.1
 
 A browser-based application for Activity-Based Standard Cost & GHG Accounting in Multi-Level Manufacturing Structures.
 
@@ -73,4 +73,4 @@ Third-party software retains its respective license notices in the distribution.
 
 For academic use, please cite the archived version of this application using the DOI provided in the associated Zenodo record.
 
-*The DOI will be added after the first public release.*
+[https://doi.org/10.5281/zenodo.23769870](https://doi.org/10.5281/zenodo.23769870)
