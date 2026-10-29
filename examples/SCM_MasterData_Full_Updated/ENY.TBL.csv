@@ -1,0 +1,4 @@
+"enyID","enyName","enyDescription","emEstd","uOMemE"
+1,"Electricity mix","Electricity generated from mixed sources",0.127,"kgCO2e/kWh"
+2,"Natural gas","Natural gas for energy generation",0.271,"kgCO2e/kWh"
+3,"Fuel","Fuel for transportation",0.2,"kgCO2e/kWh"

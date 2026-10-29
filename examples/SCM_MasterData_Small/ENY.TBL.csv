@@ -1,0 +1,3 @@
+enyID,enyName,enyDescription,emEstd,uOMemE
+1,Electricity,Electricity used by the electric assembler,0.069,kgCO2e/kWh
+2,Gas,Gas used by the gas assembler,0.069,kgCO2e/kWh

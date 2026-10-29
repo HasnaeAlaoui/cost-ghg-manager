@@ -1,0 +1,10 @@
+matID,matName,matDescription,qMstd,uOMqM,uMELstd,uOMuMEL
+1,CoverRed,Red slot car cover,29,EUR/pc,0.15,kgCO2e/pc
+2,CoverBlue,Blue slot car cover,28,EUR/pc,0.1,kgCO2e/pc
+3,Motor,Purchased motor,10,EUR/pc,0.2,kgCO2e/pc
+4,MotorMountingBracket,Purchased motor mounting bracket,0.12,EUR/pc,0.0006,kgCO2e/pc
+5,CScrew_M2x6,Cylinder screw M2x6,0.02,EUR/pc,0.05,kgCO2e/pc
+6,UnderBody,Purchased underbody,1.44,EUR/pc,0.0072,kgCO2e/pc
+7,PowerSystem,Purchased power system,3.26,EUR/pc,0.06,kgCO2e/pc
+8,WheelAssembly,Purchased wheel assembly,13.4,EUR/pc,0.766,kgCO2e/pc
+9,WheelAssemblyDriven,Purchased driven wheel assembly,18.2,EUR/pc,1.1,kgCO2e/pc

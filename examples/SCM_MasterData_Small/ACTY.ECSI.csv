@@ -1,0 +1,4 @@
+actyID,actyName,actyDescription,actyCat
+1,DriveUnitAssembly,Assembly of the drive unit,PrimaryActy
+2,ChassisAssembly,Assembly of the chassis,PrimaryActy
+3,SlotCarAssembly,Final assembly of the slot car,PrimaryActy

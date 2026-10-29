@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cost &amp; GHG Manager</title>
+<link rel="stylesheet" href="css/style.css?v=v01-header-subtitle-20261014-1"><link rel="stylesheet" href="css/reports.css"><link rel="stylesheet" href="css/dashboard.css"><script type="importmap">{"imports":{"./js/simulation-ui.mjs":"./js/simulation-ui.mjs?v=v01-terminology-ui-20261028-2","./js/accounting-ui.mjs":"./js/accounting-ui.mjs?v=v01-terminology-ui-20261028-2","./js/actual-ui.mjs":"./js/actual-ui.mjs?v=v01-terminology-ui-20261028-2","./js/app.js":"./js/app.js?v=v01-terminology-ui-20261028-2","./js/comparison-ui.mjs":"./js/comparison-ui.mjs?v=v01-terminology-ui-20261028-2","./js/csv-ui.mjs":"./js/csv-ui.mjs?v=v01-terminology-ui-20261028-2","./js/dashboard-ui.mjs":"./js/dashboard-ui.mjs?v=v01-terminology-ui-20261028-2","./js/graph-viewer.mjs":"./js/graph-viewer.mjs?v=v01-terminology-ui-20261028-2","./js/help-ui.mjs":"./js/help-ui.mjs?v=v01-terminology-ui-20261028-2","./js/master-ui.mjs":"./js/master-ui.mjs?v=v01-terminology-ui-20261028-2","./js/production-ui.mjs":"./js/production-ui.mjs?v=v01-terminology-ui-20261028-2","./js/project-ui.mjs":"./js/project-ui.mjs?v=v01-terminology-ui-20261028-2","./js/r-bridge.mjs":"./js/r-bridge.mjs?v=v01-terminology-ui-20261028-2","./js/reports-ui.mjs":"./js/reports-ui.mjs?v=v01-terminology-ui-20261028-2","./js/structure-ui.mjs":"./js/structure-ui.mjs?v=v01-terminology-ui-20261028-2","./js/variance-ui.mjs":"./js/variance-ui.mjs?v=v01-terminology-ui-20261028-2","./js/version.mjs":"./js/version.mjs?v=v01-terminology-ui-20261028-2"}}</script><script type="module">
+import('./js/app.js').catch(error => {
+  const status = document.getElementById('status');
+  status.textContent = 'Application initialization failed';
+  status.dataset.state = 'error';
+  const output = document.getElementById('error');
+  output.textContent = `Failed while loading application JavaScript.\n${error.stack ?? error.message}`;
+  output.hidden = false;
+  console.error('Application initialization failed:', error);
+});
+</script>
+</head>
+<body>
+<header class="global-header">
+  <div class="brand"><div class="application-mark-area"><span class="application-mark"><img src="assets/Logo1_MCGM.png" alt="Cost &amp; GHG application mark"></span></div><div class="brand-title"><h1><span class="title-cost">Cost</span> &amp; <span class="title-ghg">GHG</span> Manager</h1><p class="brand-subtitle">Activity-Based Standard Cost &amp; GHG Accounting &middot; Multi-Level Manufacturing Structures (L.H. Alaoui, W.S.A. Schwaiger, IMW/TU Wien)</p></div></div>
+  <div class="header-utilities"><div class="header-utilities"><div class="logo-area institution-right"><img id="tu-logo" alt="TU Wien" hidden><span id="logo-fallback">TU Wien</span></div><div class="project-tools"><div class="project-line"><span><span id="project-name">Untitled project</span> <small>&middot; <span id="project-state">Unsaved</span></small></span><span id="status" role="status" aria-live="polite">Starting R...</span></div><div class="project-actions" aria-label="Project actions"><button id="new-project" disabled>New Project</button><button id="load-project" disabled>Load Project</button><button id="save-project" disabled>Save Project</button></div></div>
+</div>
+
+</div>
+<p id="project-message" class="project-message" role="status" aria-live="polite"></p>
+</header>
+<input id="project-file" type="file" accept=".json,application/json" hidden>
+
+<div class="app-shell">
+<nav class="sidebar" aria-label="Application modules">
+
+  <button id="nav-dashboard" class="nav-item active" aria-current="page" disabled><span aria-hidden="true">&#9638;</span><span>Dashboard</span></button>
+  <button id="nav-master" class="nav-item"><span aria-hidden="true">▦</span><span>Master Data</span></button>
+  <button id="nav-structure" class="nav-item" disabled title="Production Information"><span aria-hidden="true">◇</span><span>Production Information</span></button>
+  <button id="nav-production" class="nav-item" disabled title="Production Order"><span aria-hidden="true">⚙</span><span>Production Order</span></button>
+  <button id="nav-actual" class="nav-item" disabled title="Production Execution"><span aria-hidden="true">&#9654;</span><span>Production Execution</span></button>
+  <button id="nav-accounting" class="nav-item" disabled title="Standard Accounting"><span aria-hidden="true">&#8801;</span><span>Standard Accounting</span></button>
+  <button id="nav-variance" class="nav-item" disabled title="Variance Analysis"><span aria-hidden="true">&#916;</span><span>Variance Analysis</span></button>
+  <div class="sidebar-help-links">
+  <button id="help-open" class="nav-item" aria-haspopup="dialog" aria-controls="help-dialog">Help</button>
+  <button id="about-open" class="nav-item" aria-haspopup="dialog" aria-controls="help-dialog">About</button>
+  </div>
+</nav>
+<dialog id="help-dialog" aria-labelledby="help-title">
+ <div class="panel-heading"><h2 id="help-title">Help</h2><button id="help-close" type="button">Close</button></div>
+ <div id="help-tabs" class="entity-tabs" role="tablist" aria-label="Help topics">
+  <button id="help-start-tab" type="button" role="tab" aria-selected="true" aria-controls="help-start" class="active">Getting Started</button>
+  <button id="help-terms-tab" type="button" role="tab" aria-selected="false" aria-controls="help-terms" tabindex="-1">Glossary</button>
+
+ </div>
+ <section id="help-start" role="tabpanel" aria-labelledby="help-start-tab" tabindex="0">
+
+  <ol class="help-workflow">
+   <li><strong>Master Data.</strong> Create Materials, WIP, Finished Products, Activities, Equipment and Energy with <b>+ New …</b>. Enter material prices and emission liabilities, and equipment and energy reference parameters. Items is the derived registry of MAT, WIP and FP.</li>
+   <li><strong>Production Information.</strong> Create <b>BOM</b> component quantities and <b>Routing</b> activity/equipment/energy assignments with standard execution time and power. Review the <b>Production Graph</b>; WIP can contain further production levels.</li>
+   <li><strong>Production Order.</strong> Select a Finished Product and Order Quantity, then <b>Create Production Order</b>. In <b>Generated ProNodeTree</b>, select the production order and click <b>Generate ProNodeTree</b>. Each repeated use of a produced item retains its own production node identity.</li>
+   <li><strong>Production Execution.</strong> Select a generated Planned order and click <b>Execute Production</b>. ActyResponse.ECSI initializes from standards and ProductionOrder.ECSI becomes Completed. Completed orders remain available for inspection; execution, editing, deletion and regeneration are locked. Use <b>Edit Activity Response</b> to select a production node, edit <code>rEact</code>, <code>powEact</code>, <code>emEact</code> and its direct BOM quantities <code>rMact</code>, including WIP, then <b>Save Activity Response</b>.</li>
+   <li><strong>Standard Accounting.</strong> Use <b>Calculate Standard</b> and <b>Calculate Actual</b>. Review <b>Order Summary</b> and <b>Node Traceability</b>. Order totals include finished-product roots only; recursive node totals overlap and must not be added together.</li>
+   <li><strong>Variance Analysis.</strong> Open the Variance Analysis module, select an executed production order and click <b>Calculate Analytical Variances</b>. Efficiency and price/factor components explain the model's analytical variance; they are distinct from full Actual vs. Standard differences. Real-time Simulation is disabled in v0.1.</li>
+  </ol>
+  <p class="help-note">Use <b>Save Project</b> to download JSON and <b>Load Project</b> to restore it. Recalculate results after loading or changing inputs. New sessions start empty.</p>
+ </section>
+ <section id="help-terms" role="tabpanel" aria-labelledby="help-terms-tab" tabindex="0" hidden>
+  <p><code>std</code> = standard · <code>act</code> = actual (e.g. <code>PACstd</code>/<code>PACact</code>, <code>PCFstd</code>/<code>PCFact</code>).</p>
+  <details open><summary>Manufacturing Concepts &amp; Resources</summary>
+   <dl class="help-definitions">
+    <dt>MAT / WIP / FP</dt><dd>Purchased material / work in progress / finished product.</dd>
+    <dt>Activity / Capacity / Direct resources</dt><dd>Activities use equipment capacity and energy; directly consumed materials contribute direct cost.</dd>
+    <dt>BOM / Routing</dt><dd>Bill of materials: components and quantities. Routing: activity, equipment, energy, time and power.</dd>
+    <dt>ProductionOrder.ECSI / orderID / orderStatus</dt><dd>Production order / its identifier / Planned before execution, Completed after successful execution.</dd>
+    <dt>BOM.ECSI</dt><dd>Canonical product structure. Source parent and child identities resolve through ITEM.TBL to parentItemID and childItemID. bomID identifies the relationship; fpID provides product context, and rMstd and matUOM hold standard design inputs.</dd>
+    <dt>Routing.ECSI</dt><dd>Canonical production structure. Source WIP or FP identity resolves through ITEM.TBL to itemID. routeID identifies the relationship; fpID provides product context. Activity, equipment, energy, standard time and power retain their established attributes.</dd>
+    <dt>ProNodeTree.ECSI / nodeID</dt><dd>R-generated production occurrences with nodeID, chilNodeID, routeID, bomID, fpID, itemID and itemQuantity. Repeated items retain distinct production nodes; material leaves are display occurrences. Quantities remain per finished-product unit.</dd>
+    <dt>Itemization</dt><dd>Generates the read-only ITEM.TBL from finished products, WIP and materials in that order. itemID is assigned using row_number(); source identities are resolved by erpCat plus erpID, never by item names.</dd>
+    <dt>matID / wipID / fpID / actyID / eqipID / enyID</dt><dd>Original material / WIP / finished-product / activity / equipment / energy identifiers.</dd>
+    <dt>matName / wipName / fpName / actyName / eqipName / enyName</dt><dd>Names in the corresponding source masters.</dd>
+    <dt>matDescription / wipDescription / fpDescription / actyDescription / eqipDescription / enyDescription</dt><dd>Descriptions in the corresponding source masters.</dd>
+    <dt>actyCat / eqipCat</dt><dd>Activity classification (PrimaryActy or SecondaryActy) / equipment classification (ProductionEQIP or AssemblyEQIP).</dd>
+    <dt>parentItemID / childItemID</dt><dd>Generated unified item identifiers of a canonical BOM parent / component.</dd>
+    <dt>parentItemName / childItemName</dt><dd>Names derived from the canonical BOM item references.</dd>
+    <dt>ActyResponse.ECSI / jobID</dt><dd>Occurrence-specific Activity Response observations / response identifier.</dd>
+    <dt>orderStart / orderEnd</dt><dd>Production order start / end date.</dd>
+    <dt>bomID / routeID</dt><dd>BOM relationship identifier / routing relationship identifier.</dd>
+   </dl>
+  </details>
+  <details><summary>Source Product Structure (BOM CSV)</summary>
+   <dl class="help-definitions">
+    <dt>parCat</dt><dd>Category of the parent entity (FP or WIP).</dd>
+    <dt>parID</dt><dd>Identifier of the parent entity in its source master data.</dd>
+    <dt>childCat</dt><dd>Category of the component entity (WIP or MAT).</dd>
+    <dt>childID</dt><dd>Identifier of the child entity in its source master data.</dd>
+   </dl>
+  </details>
+  <details><summary>Source Production Structure (Routing CSV)</summary>
+   <dl class="help-definitions">
+    <dt>wipFpCat</dt><dd>Category of the produced entity (WIP or FP).</dd>
+    <dt>wipFpID</dt><dd>Identifier of the produced entity in its source master data.</dd>
+   </dl>
+  </details>
+  <details><summary>Generated ITEM.TBL</summary>
+   <dl class="help-definitions">
+    <dt>itemID</dt><dd>Unified item identifier generated during itemization.</dd>
+    <dt>erpID</dt><dd>Identifier of the entity in its originating master data.</dd>
+    <dt>erpCat</dt><dd>Source entity category (final, semi, or mat). Source FP, WIP and MAT map to final, semi and mat, respectively.</dd>
+    <dt>itemName</dt><dd>Name of the item.</dd>
+    <dt>itemCat</dt><dd>Item classification (finished, intermediate, or material). Finished products, WIP and materials map to these classifications, respectively.</dd>
+   </dl>
+  </details>
+  <details><summary>Generated ProNodeTree.ECSI</summary>
+   <dl class="help-definitions">
+    <dt>itemQuantity</dt><dd>Quantity of the item required at this production node to fulfill one finished-product unit. Propagated recursively as curQty * rMstd.</dd>
+    <dt>chilNodeID / rootNodeID</dt><dd>Child production-node identifiers / finished-product root identifiers used for order totals.</dd>
+    <dt>orderQuantity</dt><dd>Number of finished-product units requested in a production order.</dd>
+   </dl>
+  </details>
+  <details><summary>Production Parameters</summary>
+   <p class="help-glossary-note">Time inputs use minutes; energy/GHG calculations convert minutes to hours.</p>
+   <dl class="help-definitions">
+    <dt>rEstd / rEact</dt><dd>Routing rEstd and Activity Response rEact are recorded in min/unit. Variance tables show rEstd per unit and rEact in minutes (observation × itemQuantity).</dd>
+    <dt>rMstd / rMact</dt><dd>Direct BOM consumption, including WIP · quantity per parent unit.</dd>
+    <dt>powEstd / powEact</dt><dd>Power · kW; energy consumed = (rE / 60) × powE.</dd>
+    <dt>emEstd / emEact</dt><dd>Energy emission coefficient · kgCO₂e/kWh; actual coefficient belongs to the production node.</dd>
+    <dt>ECact</dt><dd>Actual energy consumed at the production node · kWh; (accounting rEact / 60) × powEact.</dd>
+    <dt>pEstd / qEstd</dt><dd>Full / variable equipment cost rate · EUR/min.</dd>
+    <dt>qMstd</dt><dd>Material price · EUR per material unit.</dd>
+    <dt>uMELstd</dt><dd>Material emission liability · kgCO₂e per material unit.</dd>
+    <dt>uEELstd</dt><dd>Equipment emission liability · kgCO₂e/eqip.</dd>
+    <dt>matUOM / eqipUOM / powUOM</dt><dd>BOM consumption unit / routing execution-time unit / power unit.</dd>
+    <dt>uOMqM / uOMuMEL / uOMpE / uOMqE / uOMuEEL / uOMemE</dt><dd>Units of material price / material emission liability / full cost rate / variable cost rate / equipment emission liability / energy emission coefficient.</dd>
+    <dt>costUOM / ghgUOM</dt><dd>Accounting result units: EUR / kgCO2e.</dd>
+    <dt>ltCapacity</dt><dd>Equipment lifetime capacity.</dd>
+    <dt>cuEELstd</dt><dd>Capacity-unit equipment emission liability · cuEELstd = uEELstd / ltCapacity.</dd>
+   </dl>
+  </details>
+  <details><summary>Cost Accounting Metrics</summary>
+   <p class="help-glossary-note">EUR · Recursive results; order totals use finished-product roots only.</p>
+   <dl class="help-definitions">
+    <dt>PAC</dt><dd>Production Activity Cost.</dd>
+    <dt>PACv / PACf</dt><dd>Variable / fixed activity cost · PACf = PAC − PACv.</dd>
+    <dt>PDC</dt><dd>Production Direct Cost: purchased-material costs and recursively included WIP direct costs.</dd>
+    <dt>PC</dt><dd>Production Cost · PC = PAC + PDC.</dd>
+    <dt>PCstdUnit / PCactUnit</dt><dd>Standard / actual order production cost divided by orderQuantity.</dd>
+    <dt>PCv / PCf</dt><dd>Variable / fixed production cost · PCv = PACv + PDC; PCf = PACf.</dd>
+   </dl>
+  </details>
+  <details><summary>GHG Accounting Metrics</summary>
+   <p class="help-glossary-note">kgCO₂e · Scope descriptions follow the methodology’s classification.</p>
+   <dl class="help-definitions">
+    <dt>PACF</dt><dd>Production Activity Carbon Footprint · local contribution = (rE / 60) × powE × emE, using the corresponding standard or actual inputs.</dd>
+    <dt>PECF</dt><dd>Production Equipment Carbon Footprint · local contribution = (rE / 60) × cuEEL, using the corresponding standard or actual inputs.</dd>
+    <dt>PMCF</dt><dd>Production Material Carbon Footprint: purchased-material emissions and recursively included WIP material emissions.</dd>
+    <dt>PCFint</dt><dd>Internal Production Carbon Footprint · PCFint = PACF.</dd>
+    <dt>PCFext</dt><dd>External Production Carbon Footprint · PCFext = PECF + PMCF.</dd>
+    <dt>PCF</dt><dd>Production Carbon Footprint · PCF = PCFint + PCFext.</dd>
+    <dt>PCFstdUnit / PCFactUnit</dt><dd>Standard / actual order carbon footprint divided by orderQuantity.</dd>
+    <dt>Scope 1</dt><dd>Internal activity emissions from combusted energy sources.</dd>
+    <dt>Scope 2</dt><dd>Internal activity emissions from purchased electricity.</dd>
+    <dt>Scope 3</dt><dd>Embedded upstream equipment/material emissions represented by the methodology.</dd>
+   </dl>
+  </details>
+  <details><summary>Analytical Variances</summary>
+   <p class="help-glossary-note">Cost variances: EUR · GHG variances: kgCO₂e.</p>
+   <dl class="help-definitions">
+    <dt>PACEV / PACPV</dt><dd>Variable activity-cost efficiency / price-rate variance.</dd>
+    <dt>PDCEV / PDCPV</dt><dd>Direct-material cost efficiency / price variance; efficiency includes WIP-consumption effects.</dd>
+    <dt>PACFBV / PDCFBV</dt><dd>Variable activity / direct-material flexible-budget variance: each sums its efficiency and price components.</dd>
+    <dt>PCEV / PCPV</dt><dd>Production cost efficiency / price variance · PCEV = PACEV + PDCEV; PCPV = PACPV + PDCPV.</dd>
+    <dt>PCFBV</dt><dd>Production Cost Flexible-Budget Variance · PCFBV = PCEV + PCPV; distinct from PCact − PCstd.</dd>
+    <dt>PACFEmV / PACFEnyV</dt><dd>Activity GHG emission-coefficient / energy-consumption variance.</dd>
+    <dt>PECFEV / PECFELV</dt><dd>Equipment GHG input / emission-liability variance.</dd>
+    <dt>PMCFEV / PMCFELV</dt><dd>Material GHG input / emission-liability variance.</dd>
+    <dt>PACFTV / PECFTV / PMCFTV</dt><dd>Total activity / equipment / material GHG variance: each sums its two components.</dd>
+    <dt>PCFintTV / PCFextTV</dt><dd>Internal / external GHG variance · PCFintTV = PACFTV; PCFextTV = PECFTV + PMCFTV.</dd>
+    <dt>PCFTV</dt><dd>Total production GHG variance · PCFTV = PCFintTV + PCFextTV.</dd>
+    <dt>Direct local deviation</dt><dd>Actual vs. Standard for own activity, equipment emissions and purchased-material contributions; excludes child WIP.</dd>
+    <dt>Recursive deviation</dt><dd>Actual vs. Standard for recursive results, including descendants and parent WIP-quantity effects.</dd>
+    <dt>Analytical variance</dt><dd>Efficiency and price/factor components; zero direct local deviation does not exclude WIP-related drivers.</dd>
+   </dl>
+  </details>
+  <p class="help-source"><strong>Source:</strong> Baumüller, J. &amp; Schwaiger, W. S. A. (2026). <cite>Activity-Based Standard-Cost &amp; GHG-Accounting Methodology: Integrating economic cost and ecological GHG emission into a common diagnostic management control system</cite>. European Accounting Association (EAA) 2026, Prague, Version 2.0.</p>
+ </section> <section id="help-about" aria-labelledby="help-title" tabindex="0" hidden>
+  <img class="help-logo" src="assets/Logo1_MCGM.png" alt="Cost &amp; GHG Manager">
+  <p><strong>Cost &amp; GHG Manager</strong> is a research and teaching application for Activity-Based Standard Cost &amp; GHG Accounting in Multi-Level Manufacturing Structures.</p>
+  <p>Developed in the context of PhD research at TU Wien.</p>
+  <p id="about-version" class="muted"></p>
+ </section>
+</dialog>
+<main>
+<section id="dashboard-workspace" class="module-workspace">
+ <div class="workspace-heading"><div><p class="report-eyebrow">LIVE PROJECT OVERVIEW</p><h2>Dashboard</h2></div><button id="dashboard-refresh" disabled>Refresh Overview</button></div>
+ <p id="dashboard-error" role="alert" hidden></p>
+ <div id="dashboard-context"></div>
+ <nav id="dashboard-workflow" class="dashboard-workflow" aria-label="Learning workflow"></nav>
+ <div class="toolbar"><div><label for="dashboard-order">Production Order</label><select id="dashboard-order" disabled></select></div></div>
+ <div id="dashboard-content" aria-live="polite"></div>
+ 
+</section>
+<section id="reports-workspace" class="module-workspace" hidden>
+ <div class="workspace-heading"><h2>Reports</h2></div>
+ <nav class="entity-tabs report-controls" aria-label="Report mode"><button id="report-individual-mode" class="active">Individual Order</button><button id="report-compare-mode">Compare Orders</button></nav>
+ <div class="toolbar report-controls"><div><label for="report-order">Production Order / Order</label><select id="report-order"></select></div><div id="report-second-field" hidden><label for="report-second-order">Compare with order</label><select id="report-second-order"></select></div><div class="toolbar-actions"><button id="generate-report" class="primary" disabled>Generate Report</button><button id="export-report" disabled>Export PDF</button></div></div>
+ <p id="report-error" role="alert" hidden></p>
+ <article id="report-content" class="accounting-report" hidden></article>
+</section>
+<section id="accounting-workspace" class="module-workspace" hidden>
+ <div class="workspace-heading"><h2>Standard Accounting</h2></div>
+ <nav class="entity-tabs"><button id="accounting-summary-tab" class="active">Order Summary</button><button id="accounting-detail-tab">Node Traceability</button></nav>
+ <div class="toolbar"><div><label for="accounting-order">Generated Production Order</label><select id="accounting-order"></select></div><div class="toolbar-actions"><button id="calculate-standard">Calculate Standard</button><button id="calculate-actual" class="primary">Calculate Actual</button></div></div>
+ <p id="accounting-error" role="alert" hidden></p>
+ <button id="compare-order" type="button">Compare Standard vs Actual</button>
+ <div id="accounting-comparison" aria-live="polite"></div>
+ <div id="accounting-detail-view" hidden><div id="accounting-results" class="table-scroll"></div>
+ <div class="table-footer"><span>AccountingDetail.MCS</span><span>Recursive node-level accounting trace</span></div></div>
+ <div id="accounting-summary-view"><div id="accounting-summary" class="table-scroll"></div><div class="table-footer"><span>Accounting.MCS</span></div></div>
+ <p id="accounting-mode" class="field-note"></p>
+ <p id="accounting-status" class="field-note" role="status"></p>
+</section>
+<section id="variance-workspace" class="module-workspace" hidden>
+ <div class="workspace-heading"><h2>Variance Analysis</h2></div>
+ <nav class="entity-tabs" aria-label="Variance Analysis views"><button id="variance-analytical-tab" class="active" aria-current="page" disabled>Analytical Variances</button><button id="variance-simulation-tab" disabled aria-disabled="true" title="Unavailable in v0.1">Real-time Simulation</button></nav>
+ <div id="analytical-variance-panel">
+ <div class="toolbar"><div><label for="variance-order">Generated Production Order</label><select id="variance-order"></select></div></div>
+ <p id="variance-error" class="error" role="alert" hidden></p>
+ <div id="variance-view">
+ <div class="toolbar"><button id="calculate-variance" class="primary">Calculate Analytical Variances</button><button id="variance-summary-tab">Order Summary</button><button id="variance-detail-tab">Node Traceability</button></div>
+ <h3>Cost Variance</h3><div id="variance-cost" class="table-scroll"></div>
+ <h3>GHG Variance</h3><div id="variance-ghg" class="table-scroll"></div>
+ <div class="table-footer"><span id="variance-caption">Accounting.MCS &mdash; Analytical Cost &amp; GHG Variance Results</span></div>
+ </div>
+ </div>
+<section id="simulation-workspace" class="module-workspace" hidden inert>
+ <div class="toolbar"><div><label for="simulation-order">Production Order</label><select id="simulation-order"></select></div><div><label for="simulation-node">Production Node</label><select id="simulation-node"></select></div><button id="simulation-reset" type="button">Reset to Recorded Actuals</button></div>
+ <p id="simulation-error" class="error" role="alert" hidden></p>
+ <form id="simulation-form" hidden><fieldset disabled><div class="simulation-grid">
+ <label>rEact<input id="simulation-time" type="number" min="0" step="any" required></label>
+ <label>powEact<input id="simulation-power" type="number" min="0" step="any" required></label>
+ <label>emEact<input id="simulation-emission" type="number" min="0" step="any" required></label>
+ </div><div id="simulation-materials" class="simulation-grid"></div>
+ </fieldset></form>
+ <div id="simulation-results" aria-live="polite"></div>
+</section>
+
+</section>
+
+<pre id="error" role="alert" hidden></pre>
+<p id="project-error" role="alert"></p>
+<div id="master-workspace" class="module-workspace" hidden>
+  <div class="workspace-heading"><div><h2>Master Data</h2></div><span class="context-label">Reference data</span></div>
+  <nav class="entity-tabs" aria-label="Master data entities"><button class="active" aria-current="page" data-master-tab="material" disabled>Materials</button><button data-master-tab="wip" disabled>WIP</button><button data-master-tab="fp" disabled>Finished Products</button><button data-master-tab="items" disabled>Items</button><button data-master-tab="activity" disabled>Activities</button><button data-master-tab="equipment" disabled>Equipment</button><button data-master-tab="energy" disabled>Energy</button></nav>
+    <section id="materials" class="materials-workspace" aria-label="Materials" hidden>
+    <div class="toolbar"><div><h3>Materials <span id="material-count" class="count">0</span></h3></div><div class="toolbar-actions"><button id="new-material" class="primary" aria-expanded="false" aria-controls="material-panel" disabled>+ New Material</button></div></div>
+    <div class="material-content">
+      <div class="table-workspace">
+        <div class="table-scroll"><table><caption class="sr-only">MAT.TBL — Material Master</caption><thead><tr id="material-columns"></tr></thead><tbody id="material-rows"></tbody></table></div>
+        <div class="table-footer"><span>MAT.TBL</span><span>IDs assigned automatically · Session data</span></div>
+</div>
+      <aside id="material-panel" class="details-panel" aria-labelledby="material-panel-title" hidden>
+        <div class="panel-heading"><div><p class="eyebrow">MATERIAL MASTER</p><h3 id="material-panel-title">New Material</h3></div><button id="close-material" aria-label="Close material form">×</button></div>
+        <form id="material-form"><fieldset id="material-fields" disabled>
+          <legend class="sr-only">Material details</legend>
+          <fieldset><legend class="sr-only">Material details</legend><label for="material-name">Material name *</label><input id="material-name" name="matName" required><label for="material-description">Material description</label><textarea id="material-description" name="matDescription" rows="3"></textarea></fieldset>
+          <fieldset><legend>Cost data</legend><div class="field-pair"><div><label for="material-price">Price (qMstd) *</label><input id="material-price" name="qMstd" type="number" min="0" step="any" required></div><div><label for="price-uom">UOM (uOMqM) *</label><select id="price-uom" name="uOMqM" required><option value="">Select UOM</option></select></div></div></fieldset>
+          <fieldset><legend>GHG data</legend><div class="field-pair"><div><label for="material-ghg">E-Liability (uMELstd) *</label><input id="material-ghg" name="uMELstd" type="number" min="0" step="any" required></div><div><label for="ghg-uom">UOM (uOMuMEL) *</label><select id="ghg-uom" name="uOMuMEL" required><option value="">Select UOM</option></select></div></div></fieldset>
+          <div class="form-actions"><button type="button" id="cancel-material">Cancel</button><button id="save-material" class="primary" type="submit">Create Material</button></div>
+        </fieldset><p id="creation-status" role="status" aria-live="polite"></p><p id="creation-error" role="alert" hidden></p></form>
+      </aside>
+    </div>
+  </section>
+  <section id="items-workspace" class="materials-workspace" aria-labelledby="items-title" hidden>
+    <div class="toolbar"><div><h3 id="items-title">Items <span class="badge">Read-only</span></h3></div></div>
+    <div class="table-workspace"><div class="table-scroll"><table><caption class="sr-only">ITEM.TBL</caption><thead><tr id="item-columns"></tr></thead><tbody id="item-rows"></tbody></table></div><div class="table-footer"><span>ITEM.TBL</span><span>Generated by R from MAT / WIP / FP</span></div></div>
+  </section>
+  <section id="other-masters" class="materials-workspace" aria-labelledby="master-title" hidden>
+    <div class="toolbar"><div><h3><span id="master-title"></span> <span id="master-count" class="count">0</span></h3></div><div class="toolbar-actions"><button id="new-master" class="primary" aria-expanded="false" aria-controls="master-panel">+ New</button></div></div>
+    <div class="material-content">
+      <div id="master-table-workspace" class="table-workspace"><div class="table-scroll"><table><caption id="master-caption" class="sr-only"></caption><thead><tr id="master-columns"></tr></thead><tbody id="master-rows"></tbody></table></div><div class="table-footer"><span id="master-table-name"></span></div></div>
+      <aside id="master-panel" class="details-panel" aria-labelledby="master-panel-title" hidden>
+        <div class="panel-heading"><h3 id="master-panel-title">New</h3><button id="close-master" aria-label="Close editor">&times;</button></div>
+        <form id="master-form"><fieldset id="master-fields"><legend class="sr-only">Master data details</legend>
+          <fieldset><legend class="sr-only">Identification</legend><label for="master-name">Name *</label><input id="master-name" required><label for="master-description">Description</label><textarea id="master-description" rows="3"></textarea></fieldset>
+          <fieldset id="resource-fields" hidden></fieldset>
+          <fieldset id="master-category-field" hidden><legend>Activity classification</legend><label for="master-category">Category (actyCat) *</label><select id="master-category" required disabled><option value="">Select category</option></select></fieldset>
+          <div class="form-actions"><button type="button" id="cancel-master">Cancel</button><button id="save-master" class="primary" type="submit">Create</button></div>
+        </fieldset><p id="master-status" role="status" aria-live="polite"></p><p id="master-error" role="alert" hidden></p></form>
+      </aside>
+    </div>
+  </section>
+</div>
+<section id="structure-workspace" class="module-workspace" hidden>
+ <div class="workspace-heading"><div><h2>Production Information</h2></div></div>
+ <nav class="entity-tabs" aria-label="Production information views"><button data-structure-kind="bom" class="active">BOM</button><button data-structure-kind="route">Routing</button><button data-structure-kind="production">Production Graph</button></nav>
+ <div class="toolbar"><div><label for="structure-parent">Selected produced item</label><select id="structure-parent"><option value="0">Select WIP / FP</option></select></div><div class="toolbar-actions"><button id="structure-by">By Produced Item</button><button id="structure-all">All Relations</button><button id="structure-graph">Graph</button><button id="structure-expand" hidden>Expand Graph</button><button id="structure-new" class="primary">+ Add Component</button></div></div>
+ <div id="graph-context-controls" hidden><label for="graph-context">Finished-product graph context</label><select id="graph-context"><option value="0">All configurations</option></select></div>
+ <p id="structure-error" role="alert" hidden></p>
+ <div class="material-content">
+  <div class="table-workspace"><div id="structure-table" class="table-scroll"><table><caption id="structure-caption" class="sr-only">BOM.ECSI</caption><thead><tr id="structure-columns"></tr></thead><tbody id="structure-rows"></tbody></table></div><div id="structure-svg" class="table-scroll" hidden></div><p id="graph-details" class="field-note" aria-live="polite"></p><div class="table-footer"></div></div>
+  <aside id="structure-panel" class="details-panel" hidden><div class="panel-heading"><h3 id="structure-editor-title">Add Component</h3><button id="structure-close" aria-label="Close structure editor">&times;</button></div>
+   <form id="structure-form"><fieldset id="structure-fields"><legend class="sr-only">Design parameters</legend>
+    <label for="design-parent">Parent Item / Produced Item</label><select id="design-parent" required></select>
+    <label for="design-scope">Finished Product (fpID)</label><select id="design-scope"><option value="0">Shared configuration</option></select>
+    <fieldset id="bom-fields"><label for="design-child">Child Item</label><select id="design-child" required></select><label for="design-quantity">Standard quantity (rMstd)</label><input id="design-quantity" type="number" step="any" required><label for="design-material-unit">UOM (matUOM)</label><select id="design-material-unit" required></select></fieldset>
+    <fieldset id="route-fields" disabled hidden><label for="design-activity">Activity</label><select id="design-activity" required></select><label for="design-equipment">Equipment</label><select id="design-equipment" required></select><label for="design-energy">Energy</label><select id="design-energy" required></select><label for="design-time">Standard resource time (rEstd)</label><input id="design-time" type="number" step="any" required><label for="design-time-unit">UOM (eqipUOM)</label><select id="design-time-unit" required></select><label for="design-power">Standard power (powEstd)</label><input id="design-power" type="number" step="any" required><label for="design-power-unit">UOM (powUOM)</label><select id="design-power-unit" required></select></fieldset>
+    <div class="form-actions"><button id="structure-cancel" type="button">Cancel</button><button id="structure-save" class="primary">Create</button></div>
+   </fieldset></form>
+  </aside>
+ </div>
+</section>
+<section id="production-workspace" class="module-workspace" hidden>
+ <div class="workspace-heading"><div><h2>Production Order</h2></div></div>
+ <nav class="entity-tabs" aria-label="Production views"><button id="production-requests" class="active">Production Order</button><button id="production-generated">Generated ProNodeTree</button></nav>
+ <p id="production-error" role="alert" hidden></p>
+ <div id="production-request-view">
+  <form id="production-request-form"><fieldset id="production-request-fields"><legend id="production-editor-title">Create Production Order</legend>
+   <div class="production-order-inputs">
+    <div><label for="production-fp">Finished Product</label><select id="production-fp" required></select></div>
+    <div><label for="production-quantity">Order Quantity</label><input id="production-quantity" type="number" min="1" step="1" value="1" required></div>
+    <div><label for="production-start">Order Start Date</label><input id="production-start" type="date" required></div>
+    <div><label for="production-end">Order End Date</label><input id="production-end" type="date" required></div>
+   </div>
+   <div class="form-actions"><button id="production-save" class="primary">Create Production Order</button><button id="production-cancel" type="button" hidden>Cancel Edit</button></div>
+  </fieldset></form>
+  <p id="production-maintenance-status" class="field-note" aria-live="polite"></p>
+  <div id="production-orders" class="table-scroll"></div><div id="production-orders-meta" class="table-footer"><span>ProductionOrder.ECSI</span><span>Production orders: Planned / Completed</span></div>
+ </div>
+ <div id="production-generated-view" hidden>
+  <div class="toolbar"><div><label for="production-order">Production Order</label><select id="production-order"></select></div><div class="toolbar-actions"><button id="production-generate" class="primary">Generate ProNodeTree</button><button id="production-tree-mode" class="active">Tree</button><button id="production-table-mode">Table</button><button id="production-expand">Expand Tree</button></div></div>
+  <p id="production-tree-note" class="field-note"></p>
+  <div id="production-tree" class="table-scroll"></div><p id="production-tree-meta" class="field-note">ProNodeTree.ECSI</p><div id="production-table" class="table-scroll" hidden></div><div id="production-table-meta" class="table-footer" hidden><span>ProNodeTree.ECSI</span><span>Generated production node structure</span></div><p id="production-details" class="field-note" aria-live="polite"></p>
+ </div>
+</section>
+<section id="actual-workspace" class="module-workspace" hidden>
+  <p id="actual-error" role="alert" hidden></p>
+  <div class="workspace-heading"><h2>Activity Response</h2></div><p id="actual-order-context" class="field-note"></p>
+  
+  
+  <div class="toolbar"><div><label for="actual-order">Generated Production Order</label><select id="actual-order"></select></div><div class="toolbar-actions"><button id="actual-execute" disabled>Execute Production</button><button id="actual-entry-tab" class="active">Edit Activity Response</button><button id="actual-table-tab">Activity Response Table</button></div></div>
+  <p id="actual-status" class="field-note" aria-live="polite"></p>
+  <p id="actual-entry-meta" class="field-note">Editing ActyResponse.ECSI</p>
+  <div id="actual-entry" class="actual-layout">
+   <aside><label for="actual-node">Production node</label><select id="actual-node"></select></aside>
+   <div id="actual-detail" hidden><p id="actual-identity" class="field-note"></p>
+    <section class="actual-reference"><h3>Standard / Reference</h3><p id="actual-route-reference"></p></section>
+    <form id="actual-form"><fieldset><legend>Actual / Observed</legend>
+     <div class="actual-value-grid">
+      <div><label id="actual-time-label" for="actual-time">rEact</label><input id="actual-time" type="number" min="0" step="any" required></div>
+      <div><label id="actual-power-label" for="actual-power">powEact</label><input id="actual-power" type="number" min="0" step="any" required></div>
+      <div><label id="actual-emission-label" for="actual-emission">Actual energy emission coefficient / emEact (kgCO2e/kWh)</label><input id="actual-emission" type="number" min="0" step="any" required></div>
+     </div>
+     <h3>Direct BOM Inputs</h3><div id="actual-materials" class="actual-value-grid"></div>
+     <button id="actual-save" class="primary">Save Activity Response</button>
+    </fieldset></form>
+   </div>
+  </div>
+  <div id="actual-table" class="table-scroll" hidden></div><div id="actual-table-meta" class="table-footer" hidden><span>ActyResponse.ECSI</span><span>Actual production observations</span></div>
+</section>
+  <dialog id="expanded-graph" aria-labelledby="expanded-graph-title"><div class="panel-heading"><h3 id="expanded-graph-title">Production Graph</h3><div><button id="graph-fit">Fit to View</button><button id="graph-actual">Actual Size / Scroll</button><button id="graph-reset">Reset Layout</button><button id="graph-close">Close</button></div></div><div id="expanded-graph-canvas"></div><p id="expanded-graph-details" class="field-note" aria-live="polite"></p></dialog>
+<dialog id="csv-dialog" aria-labelledby="csv-title">
+  <div class="panel-heading"><h3 id="csv-title">Import CSV</h3><button id="csv-close" type="button">Cancel</button></div>
+  <p>Replace Table: all existing records in the selected table will be replaced. Save Project first to keep a backup. No changes are applied until you confirm below.</p>
+  <label for="csv-file">CSV file</label><input id="csv-file" type="file" accept=".csv,text/csv">
+  <div id="csv-companion-field" hidden><label id="csv-companion-label" for="csv-companion">Matching reference CSV</label><input id="csv-companion" type="file" accept=".csv,text/csv"></div>
+  <button id="csv-validate" type="button">Validate &amp; Preview</button>
+  <p id="csv-message" role="status" aria-live="polite"></p>
+  <div id="csv-preview"></div>
+  <button id="csv-apply" class="primary" type="button" disabled>Confirm Replace Table(s)</button>
+</dialog>
+<noscript>JavaScript must be enabled to start R.</noscript>
+</main>
+</div>
+<!-- Inactive interface templates. -->
+<template id="product-structure-workspace"><section aria-label="Production Information"><nav class="entity-tabs"><button disabled>BOM</button><button disabled>Routing</button><button disabled>Structure overview</button></nav><section data-workspace="bom"><h2>BOM · Item-level DAG</h2><div class="future-model-layout"><div class="graph-canvas" aria-label="MAT, WIP and FP graph canvas"></div><aside aria-label="BOM relation details">Parent item · Child item · Standard material quantity · UOM</aside><div class="relation-table" aria-label="BOM relation table"></div></div></section><section data-workspace="routing"><h2>Routing</h2><p>Produced Item → Activity → Equipment → Energy</p><div class="future-model-layout"><div class="graph-canvas" aria-label="Routing flow canvas"></div><aside aria-label="Routing editor"></aside><div class="relation-table" aria-label="Routing table"></div></div></section></section></template>
+
+<template id="reports-workspace"><section><h2>Integrated Cost + GHG dashboard</h2><div aria-label="Accounting tables"></div><div aria-label="Charts"></div><div aria-label="Variance explanations"></div></section></template>
+</body>
+</html>

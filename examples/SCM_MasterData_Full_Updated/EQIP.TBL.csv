@@ -1,0 +1,4 @@
+eqipID,eqipName,eqipDescription,eqipCat,ltCapacity,pEstd,uOMpE,qEstd,uOMqE,uEELstd,uOMuEEL
+1,SawingMachine,Machine used to cut materials into desired lengths,ProductionEQIP,20000,2,EUR/min,0.3,EUR/min,500,kgCO2e/eqip
+2,MachiningCenter,Equipment used for machining processes,ProductionEQIP,20000,2.5,EUR/min,0.45,EUR/min,500,kgCO2e/eqip
+3,AssemblyStation,Station used to assemble different components,AssemblyEQIP,20000,1.5,EUR/min,0.2,EUR/min,100,kgCO2e/eqip

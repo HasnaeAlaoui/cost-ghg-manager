@@ -1,0 +1,4 @@
+"actyID","actyName","actyDescription","actyCat"
+1,"Cutting","Cutting raw materials into specific lengths and shapes using a sawing machine","PrimaryActy"
+2,"Machining","Processing materials into desired shapes and sizes using a machining center","PrimaryActy"
+3,"Assembly","Assembling components into intermediate or finished products","PrimaryActy"

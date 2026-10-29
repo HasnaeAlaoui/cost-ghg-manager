@@ -1,0 +1,13 @@
+wipID,wipName,wipDescription
+1,Chassis,Internally produced chassis assembly
+2,DriveUnit,Complete drive unit integrating the motor and transmission
+3,MotorMountingBracket,Bracket supporting the motor assembly
+4,UnderBody,Internally produced underbody used for chassis assembly
+5,PowerSystem,Internally produced power system for energy transfer
+6,WheelAssembly,Internally produced wheel assembly without gear
+7,Wheel,Internally produced wheel
+8,Rim,Internally produced rim
+9,WheelAssemblyDriven,Internally produced driven wheel assembly with gear
+10,AluminiumL_Shape_Cut,L-shaped aluminium intermediate produced by cutting
+11,AluminiumU_Shape_Cut,U-shaped aluminium intermediate produced by cutting
+12,AluminiumCylinder_Cut,Aluminium cylinder intermediate produced by cutting

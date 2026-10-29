@@ -1,0 +1,16 @@
+bomID,parCat,parID,childCat,childID,rMstd,matUOM
+1,WIP,50,MAT,3,1,pc/unit
+2,WIP,50,MAT,4,1,pc/unit
+3,WIP,50,MAT,5,1,pc/unit
+4,WIP,51,MAT,6,1,pc/unit
+5,WIP,51,MAT,7,1,pc/unit
+6,WIP,51,MAT,8,1,pc/unit
+7,WIP,51,MAT,9,1,pc/unit
+8,FP,100,MAT,1,1,pc/unit
+9,FP,100,MAT,5,1,pc/unit
+10,FP,100,WIP,50,1,pc/unit
+11,FP,100,WIP,51,1,pc/unit
+12,FP,101,MAT,2,1,pc/unit
+13,FP,101,MAT,5,1,pc/unit
+14,FP,101,WIP,50,1,pc/unit
+15,FP,101,WIP,51,1,pc/unit

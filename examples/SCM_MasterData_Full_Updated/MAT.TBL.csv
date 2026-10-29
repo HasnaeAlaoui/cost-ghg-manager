@@ -1,0 +1,16 @@
+matID,matName,matDescription,qMstd,uOMqM,uMELstd,uOMuMEL
+1,CoverBlue,The outer shell of the car in blue color,28,EUR/pc,0.1,kgCO2e/pc
+2,CoverRed,The outer shell of the car in red color,32,EUR/pc,0.15,kgCO2e/pc
+3,Motor,Component that converts electrical energy into mechanical energy,10,EUR/pc,0.2,kgCO2e/pc
+4,AluminiumL_Shape,Raw aluminium material in L-shape,8,EUR/m,0.04,kgCO2e/m
+5,CScrew_M2x6,Cylinder screw M2x6,0.02,EUR/pc,0.05,kgCO2e/pc
+6,AluminiumU_Shape,Raw aluminium material in U-shape,12,EUR/m,0.06,kgCO2e/m
+7,GuidePin,Guide pin used in the power pickup,2,EUR/pc,0.02,kgCO2e/pc
+8,Nut_GuidePin,Nut used with the guide pin,0.6,EUR/pc,0.01,kgCO2e/pc
+9,PowerPickup,Component used in the power pickup assembly,0.33,EUR/pc,0.03,kgCO2e/pc
+10,Axle,Axle used in wheel assemblies,1.45,EUR/pc,0.025,kgCO2e/pc
+11,BallBearing,Ball bearing used in wheel assemblies,2,EUR/pc,0.01,kgCO2e/pc
+12,Tire,Tire used in wheel assemblies,1.3,EUR/pc,0.03,kgCO2e/pc
+13,SetScrew_M3x3,Set screw M3x3 used in wheel assemblies,0.1,EUR/pc,0.15,kgCO2e/pc
+14,AluminiumCylinder,Raw aluminium cylinder used for rim production,25,EUR/m,0.03,kgCO2e/m
+15,Gear,Gear used in the driven wheel assembly,4.5,EUR/pc,0.035,kgCO2e/pc

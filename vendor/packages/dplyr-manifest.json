@@ -1,0 +1,114 @@
+[
+  {
+    "name": "cli",
+    "version": "3.6.6",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/cli_3.6.6.tgz",
+    "sha256": "efa9c2b12c2da09cccb0a27d2e7a079ebd4c38fc1d03560d599f7634eb7f9932",
+    "bytes": 967089
+  },
+  {
+    "name": "generics",
+    "version": "0.1.4",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/generics_0.1.4.tgz",
+    "sha256": "a9c7ca26beaef02a95fb0c971a9a1a5b8e09db3d99baf17796537d2bf9a396bc",
+    "bytes": 75687
+  },
+  {
+    "name": "glue",
+    "version": "1.8.1",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/glue_1.8.1.tgz",
+    "sha256": "3b025aa5fd067ad9b87fecd219e561d4537d488b33581af8beabe2b06024d44d",
+    "bytes": 152905
+  },
+  {
+    "name": "rlang",
+    "version": "1.2.0",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/rlang_1.2.0.tgz",
+    "sha256": "6e8cf0cfedf6238f14dd588f44aabb0654da0883dc2dbb7f96e4a718170a1eb4",
+    "bytes": 1139868
+  },
+  {
+    "name": "lifecycle",
+    "version": "1.0.5",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/lifecycle_1.0.5.tgz",
+    "sha256": "c2f8c5905f58b4526c3b68c6163f891b9a12f81d7e50347ad49a70b1f6592527",
+    "bytes": 102893
+  },
+  {
+    "name": "magrittr",
+    "version": "2.0.5",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/magrittr_2.0.5.tgz",
+    "sha256": "ff7c81a6839f611a9a7d16b2e03ba6e99859992128012f8e9d3d7a8ef1ad5588",
+    "bytes": 218148
+  },
+  {
+    "name": "utf8",
+    "version": "1.2.6",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/utf8_1.2.6.tgz",
+    "sha256": "51702a5960a8e85bca8a9064c37ec2f006f9f2655b1e8f35b7c6ef18362340c3",
+    "bytes": 120303
+  },
+  {
+    "name": "vctrs",
+    "version": "0.7.3",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/vctrs_0.7.3.tgz",
+    "sha256": "42cc19d325e7de2160490273d97099049f261e8b6c3e6736391d96e43923798d",
+    "bytes": 1433335
+  },
+  {
+    "name": "pillar",
+    "version": "1.11.1",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/pillar_1.11.1.tgz",
+    "sha256": "40c9fcfbfd39a0aa3e7ea784b73abcd7a0a1d4677628bb394ab0c56a0aad9be6",
+    "bytes": 497042
+  },
+  {
+    "name": "R6",
+    "version": "2.6.1",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/R6_2.6.1.tgz",
+    "sha256": "134d30277b1c64afe9ae31a4a52857822bc21d32db46479eb3ea2f3a7397c8d6",
+    "bytes": 67949
+  },
+  {
+    "name": "pkgconfig",
+    "version": "2.0.3",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/pkgconfig_2.0.3.tgz",
+    "sha256": "fc97bdb16f209e9e79fc8e64234a1bb1263035f5f244ea8b748885b28e3c5d97",
+    "bytes": 18480
+  },
+  {
+    "name": "tibble",
+    "version": "3.3.1",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/tibble_3.3.1.tgz",
+    "sha256": "b7f65a179045923b66d9e749aac9c9183b32eef1c4b1a7242eb889f07b948578",
+    "bytes": 534486
+  },
+  {
+    "name": "withr",
+    "version": "3.0.2",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/withr_3.0.2.tgz",
+    "sha256": "60dce3c8fa7b42a81a05d99c675fd82c57b8d2dca7233a6ba7d1ee543707b21c",
+    "bytes": 185760
+  },
+  {
+    "name": "tidyselect",
+    "version": "1.2.1",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/tidyselect_1.2.1.tgz",
+    "sha256": "df3668720dcce42a097cdef7e92d344dfd069a913647cbc1c0fa19ed0704285b",
+    "bytes": 166200
+  },
+  {
+    "name": "dplyr",
+    "version": "1.2.1",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/dplyr_1.2.1.tgz",
+    "sha256": "58c606c81e4539318c705f6d40a640b4cc9121e60aac3e3632d0029cf6841d08",
+    "bytes": 1130500
+  },
+  {
+    "name": "purrr",
+    "version": "1.2.2",
+    "source": "https://repo.r-wasm.org/bin/emscripten/contrib/4.6/purrr_1.2.2.tgz",
+    "sha256": "bd87e3e08ace87d8d6be7a47f4d2620843f15beb2f6e54f28eb90b1bdbb731e0",
+    "bytes": 447884
+  }
+]

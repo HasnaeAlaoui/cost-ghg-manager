@@ -1,0 +1,3 @@
+eqipID,eqipName,eqipDescription,eqipCat,ltCapacity,pEstd,uOMpE,qEstd,uOMqE,uEELstd,uOMuEEL
+1,AssemblerElectric,Electric assembly equipment,AssemblyEQIP,20000,2.30312,EUR/min,0.3,EUR/min,3744.0,kgCO2e/eqip
+2,AssemblerGas,Gas-powered assembly equipment,AssemblyEQIP,20000,2.30312,EUR/min,0.3,EUR/min,3744.0,kgCO2e/eqip
